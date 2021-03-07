@@ -24,12 +24,6 @@
 ; Ctrl + \            ; Search the currently playing song in Chrome
 ; Ctrl + End          ; Hide or show Spotify
 
-; Personal Setup ]----|
-; Ctrl + ]            ; Run a Rainmeter skin
-; Ctrl + Shft + ]     ; Run a Rainmeter skin
-; Shft + CapsLock     ; CapsLock
-; Win# + Tab          ; MenuNav
-; CapsLock            ; Enter
 
 ;|-------------------------|
 ;|--------[ Notes ]--------|
@@ -94,7 +88,7 @@
     ; Spotify has a bug where on first launch, the min, max, &
     ; close buttons are in the wrong place and arent connected
     ; to the spotify window. This results in a weirdly sized 
-    ; window, so you'll get some weirdclicks. Minimize and 
+    ; window, so you'll get some weird clicks. Minimize and 
     ; restore spotify, and try again.
     ; --------------------------------------------------------
     ; This could be an accidental click into the wrong window.
