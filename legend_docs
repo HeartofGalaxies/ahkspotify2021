@@ -1,0 +1,206 @@
+;|-------------------------|
+;|-------[ Legend ]--------|
+;|-------------------------|
+
+; MultiMedia Keys ]---| A1
+; Ctrl + Space        ; Pause
+; Ctrl + RightArrow   ; Skip Song
+; Ctrl + LeftArrow    ; Previous Song
+; Ctrl + UpArrow      ; Turn Volume Up
+; Ctrl + DownArrow    ; Turn Volume Down
+; Alt! + UpArrow      ; Unmute Volume
+; Alt! + DownArrow    ; Mute Volume
+
+; Playlist Keys ]-----| A2
+; Ctrl + Insert       ; Add to playlist1
+; Ctrl + Home         ; Add to Favorites
+; Ctrl + PageUp       ; Add to playlist2
+
+; Scrubbing Keys ]----| A3
+; Ctrl + Delete       ; Scrub 15 seconds forward
+; Ctrl + PageDown     ; Scrub 15 seconds back
+
+; Misc Keys ]---------| A4
+; Ctrl + \            ; Search the currently playing song in Chrome
+; Ctrl + End          ; Hide or show Spotify
+
+; Personal Setup ]----|
+; Ctrl + ]            ; Run a Rainmeter skin
+; Ctrl + Shft + ]     ; Run a Rainmeter skin
+; Shft + CapsLock     ; CapsLock
+; Win# + Tab          ; MenuNav
+; CapsLock            ; Enter
+
+;|-------------------------|
+;|--------[ Notes ]--------|
+;|-------------------------|
+
+;---[ A: Announcements ]---|
+
+; 1 ; | Multimedia | 
+    ; Using built in multimedia functionality, these hotkeys
+    ; will work for any computer and any program compatible
+    ; with multimedia keys. They do not require programs to
+    ; be open, and do not switch window focus. They will
+    ; override spotify's internal shortcuts. To instead
+    ; make spotifys internal volume shortcut universal,
+    ; follow the instructions in Note C4.
+
+; 2 ; | Playlist |
+    ; The code for these MUST be edited. Please see Note C2.
+    ; These hotkeys require spotify to be open, and will 
+    ; very briefly switch your window focus to spotify.
+    ; They will work with any window size.
+
+; 3 ; | MiniSkip |
+    ; These hotkeys require spotify to be open. Like the 
+    ; playlist keys, they will switch your focus to
+    ; spotify, and will work with any window size.
+
+; 4 ; | Search |
+    ; This hotkey requires both spotify and chrome to be open.
+    ; It will work with any window size, and will switch
+    ; your focus to spotify and then chrome. If you
+    ; dont want to use chrome, follow Note C3.
+
+
+;---[ B: Bug Behaviors ]---|
+
+; 1 ; | Playlist Errors |
+    ; --------------------------------------------------------
+    ; If you successfully get a menu, but unexpected results,
+    ; make sure you've followed Note C2 correctly.
+    ; --------------------------------------------------------
+    ; If you don't get a menu at all, it could be a misclick,
+    ; and the click is missing the album art or song title.
+    ; Try moving the click position.
+
+
+; 2 ; | Search Errors |
+    ; --------------------------------------------------------
+    ; If the search hotkey just opens spotify's hotkey list, 
+    ; then chrome or your preferred search engine either 
+    ; isnt open, or your ahk_class is incorrect. Open it
+    ; or see Note C3.
+    ; --------------------------------------------------------
+    ; If search only seems to refresh the page, there likely
+    ; wasnt enough time for chrome to register the newly
+    ; inputted song before the search. Try the command 
+    ; again, or up the wait time to avoid future 
+    ; occurrences.
+
+; 3 ; | Erratic Mouse Movement |
+    ; --------------------------------------------------------
+    ; Spotify has a bug where on first launch, the min, max, &
+    ; close buttons are in the wrong place and arent connected
+    ; to the spotify window. This results in a weirdly sized 
+    ; window, so you'll get some weirdclicks. Minimize and 
+    ; restore spotify, and try again.
+    ; --------------------------------------------------------
+    ; This could be an accidental click into the wrong window.
+    ; Check to make sure you don't have any windows that dont
+    ; unfocus and would stay overlapped anywhere you would be
+    ; clicking. Looking at you, windowspy. Then try moving 
+    ; the initial click position, and making sure it isn't 
+    ; clicking on any icons that could activate another
+    ; spotify window, especially the shortcut menu in 
+    ; the upper left.
+    ; --------------------------------------------------------
+    ; It could also be an incorrent window activation. Check
+    ; to make sure your ahk_classes are correct. Refer to
+    ; Note C1 for additional help.
+
+; 4 ; | Constant Clicking |
+    ; --------------------------------------------------------
+    ; You most likely have an non fatal error that is causing
+    ; an unintended loop. This could be a missing bracket,
+    ; missing return, incorrent ahk_id values, = vs := , 
+    ; or something else.
+
+; 5 ; | Confusion |
+    ; --------------------------------------------------------
+    ; If youve read all comments and notes, researched your 
+    ; problem, and followed all applicable instructions, 
+    ; and you still have an error or an undesirable 
+    ; result, please contact me :)
+
+
+;---[ C: Customization ]---|
+
+; 1 ; |   Line   | minival := false                          |
+    ; --------------------------------------------------------
+    ; If true, will automatically minimize spotify unless 
+    ; focused on specified windows. If false, will only 
+    ; minimize spotify if focused on specific windows.
+    ; It is false by default. To edit, add or remove
+    ; windows to minimize or not minimize if focused
+    ; on, see below.
+    ; --------------------------------------------------------
+    ; | Function | minimizeif(origin, min)                   |
+    ; |   Line   | desktop = WorkerW                         |
+    ; |   Line   | rainskin = RainmeterMeterWindow           |
+    ; --------------------------------------------------------
+    ; To change or add a window, open windowspy (which should
+    ; have been installed along with autohotkey), click on 
+    ; a window, and then copy paste it's ahk_class in from
+    ; windowspy. You can edit an existing else if, or make 
+    ; a new one.
+
+; 2 ; | Function | playlistOne()                             |
+    ; |   Line   | Send, {Up}{Up}{Right}{Down}{Enter}        |
+    ; --------------------------------------------------------
+    ; This code will add the currently playing song to the 1st
+    ; playlist you have. This code MUST be edited in order for
+    ; this function to work for any other playlists. In order
+    ; to change the playlist to add the song to, add a {Down}
+    ; for each playlist to go down, and {Right} to go into a
+    ; folder. To apply these changes, save and run spotify.
+    ; ahk again, and then test to ensure it adds the song 
+    ; to the correct playlist. Make sure you start your 
+    ; line with {Up}{Up}{Right}, as this opens your 
+    ; playlist list, and make sure it ends with 
+    ; {Enter} to select the playlist. Do the
+    ; same thing to playlistTwo().
+
+; 3 ; | Function | search(minSpotify, minChrome, reactivate) |
+    ; |   Line   | WinActivate, ahk_exe chrome.exe           |
+    ; --------------------------------------------------------
+    ; If you want to use your preferred search engine instead
+    ; of chrome, open windowspy, click on your preferred
+    ; search window, and copy paste it's ahk_exe in,
+    ; replacing chrome.exe.
+
+; 5 ; | Run at startup | Windows Only                        |
+    ; --------------------------------------------------------
+    ; Type Win + R to open Run, type 'shell:startup' and press
+    ; enter. This will take you to a hidden folder. Create a
+    ; shortcut for Spotify.ahk and put it in the folder, and
+    ; Spotify.ahk will now run when you start up your pc.
+
+
+;---[ D: Documentation ]---|
+
+; 2 ; | Function | miniskip(val, min)                        |
+    ; |   Line   | quarter := quarter * val                  |
+    ; --------------------------------------------------------
+    ; additionally, you could use -2 or 2 to get to the end or
+    ; the beginning, but using the skip or previous keys would
+    ; be much more efficient. Any numbers smaller or larger
+    ; than -2 or 2 would result in unpredictable effects, 
+    ; as you would be clicking to the left or right of
+    ; the scrubbing bar. Any numbers between -2 or 2
+    ; would be fine.
+
+; 3 ; | Function | miniskip(val, min)                        |
+    ; |   Line   | percent := 22.5938 * ln(.0021 * width)    |
+    ; --------------------------------------------------------
+    ; I calculated this by manually measuring the length of 
+    ; the progress bar at the min and max screen widths
+    ; with windowspy, and then plugging it into the
+    ; below functions, with y being the percentage
+    ; of the progress bar and x being the window
+    ; width. I found desmos.com to be helpful.
+    ; --------------------------------------------------------
+    ; a = (y1 - y2)/(ln(x1/x2))
+    ; b = exp((y2 * ln(x1) - y1 * ln(x2))/(y1 - y2)
+    ; y = a * ln(b * x)
