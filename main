@@ -35,16 +35,6 @@ minival := false                 ; Note C1
 ^\::search(false, false)         ; Search the currently playing song in Chrome
 ^]::jtogglespotify()             ; Hide or show Spotify
 
-;[ Personal Setup ]--------------|
-^[::rainmeterPlayerSkin1()       ; Run a Rainmeter Skin
-+^[::rainmeterPlayerSkin2()      ; Run a Rainmeter Skin
-!CapsLock::Send, {CapsLock}      ; Toggle CapsLock
-CapsLock::Send, {Enter}          ; Press Enter
-;#`::MenuNav("rename", false)    ; MenuNav
-;#Tab::MenuNav("rename", true)   ; MenuNav
-#`::MenuNav("set", false)
-#Tab::MenuNav("set", false)
-
 
 ;|-------------------------|
 ;|------[ Functions ]------|
@@ -98,33 +88,7 @@ playlistTwo()
 	Return
 }
 
-;[ MiniSkip & Search ]-----|
-
-miniskip(val, min) ; rendered obselete by james teh's code
-{	
-	MouseGetPos, origx, origy, origwin
-	WinGetClass, origin, A
-	ActivateSpotify(origin)
-	WinGetActiveStats, winTitle, width, height, winX, winY
-
-	g := 0                ; default (aka without added "listening on" green bar)
-	h := height - 5       ; get color 5 pixels from bottom to reduce color match errors
-	PixelGetColor, color, 5, %h%
-	green := 0x54B91D     ; green in hexadecimal blue-green-red (BGR) format
-	if (color = green)
-		g := 30       ; account for green bar
-
-	percent := 22.5938 * ln(.0021 * width)   ; percentage of spotify's scrubbing bar relative to window size ; Note D3
-	quarter := (width / 100) * (percent / 4) ; size of a quarter of spotify's scrubbing bar
-	quarter := quarter * val                 ; times -1, 0, or 1 to get 1/4, 1/2, or 3/4 of the way through a song ; Note D2
-
-	x := width / 2 + quarter ; get to middle of bar, then optionally add or subtract a quarter
-	y := height - 27 - g     ; the scrubbing bar is 27+ pixels from the bottom of the window
-	Click, %x%, %y%          ; click on (x, y) from bottom
-
-	Reactivate(origin, origwin, origx, origy, min)
-	Return
-}
+;[ Search ]-----|
 
 search(minChrome, reactivate) ; used by search hotkey
 {
@@ -166,82 +130,6 @@ unmuteWithoutToggle() ; unmutes only if already muted
 	SoundGet, MuteState, Master, Mute
 	if MuteState=On ; if muted
 		send {Volume_Mute}
-	Return
-}
-
-volume(val, min) ; rendered obselete by james teh's code
-{
-	MouseGetPos, origx, origy, origwin
-	WinGetClass, origin, A
-	ActivateSpotify(origin)
-
-	if (val = "up")
-		Send, ^{Up}
-	else if (val = "dn")
-		Send, ^{Down}
-
-	Reactivate(origin, origwin, origx, origy, min)
-	Return
-}
-
-rainmeterPlayerSkin1() ; toggle rainmeter skin
-{
-	Run, C:\Program Files\Rainmeter\Rainmeter.exe !ToggleConfig "Player - KawaiiPlayer Compact" "KawaiiPlayer Compact Dark.ini"
-	Return
-}
-
-rainmeterPlayerSkin2() ; toggle rainmeter skin
-{
-	Run, C:\Program Files\Rainmeter\Rainmeter.exe !ToggleConfig "Player - KawaiiPlayer Compact" "KawaiiPlayer Compact Light.ini"
-	Return
-}
-
-MenuNav(cmd, direction) ; navigate file explorer menu
-{
-	if (direction = "down")
-		Send, {Down}
-	if (direction = "right")
-		Send, {Right}
-	if (direction = true)
-		moveMouse30()
-
-	Click, down, right
-	Sleep, 100
-	Click, up, right
-	
-	if (cmd = "rename")
-		rename()
-	if (cmd = "set")
-		set()
-
-	Return
-}
-
-rename() ; rename file
-{	
-	Send, {Up}{Up}
-        Sleep, 100
-        Send, {Enter}
-	Sleep, 100
-	Send, {Left}
-	Send, {Space}
-	Send, {Left}
-	Return
-}
-
-set() ; set image as background
-{
-	Send, {Down}{Down}{Down}{Down}{Down}
-        Sleep, 100
-        Send, {Enter}
-	Return
-}
-
-moveMouse30() ; move the mouse down 30 pixels and click
-{
-	MouseGetPos, origx, origy
-	newy := origy + 30
-	Click, %origx%, %newy%
 	Return
 }
 
@@ -426,50 +314,6 @@ jvolumedown()
 
 jtogglespotify()
 {
-	spotifyHwnd := getSpotifyHwnd()
-
-	WinGet, style, Style, ahk_id %spotifyHwnd%
-	WinGet MMX, MinMax, A
-	
-	if (style & 0x10000000) ; WS_VISIBLE
-	{
-		if (MMX = 1)
-			WinActivate, ahk_id %spotifyHwnd%
-		else
-			WinHide, ahk_id %spotifyHwnd%
-	}
-	else
-	{
-		WinShow, ahk_id %spotifyHwnd%
-		WinActivate, ahk_id %spotifyHwnd%
-	}
-	Return
-}
-
-checkminimized()
-{
-	DetectHiddenWindows On
-	spotifyHwnd := getSpotifyHwnd()
-	WinGet, style, Style, ahk_id %spotifyHwnd%
-
-	;winget, mx, minmax, ahk_id %spotifyHwnd%
-	;IfEqual MMX, -1, WinRestore, ahk_id %spotifyHwnd%
-	;IfEqual MMX, -1, WinSet, Bottom, , ahk_id %spotifyHwnd%
-	;if WinExist("ahk_id %spotifyHwnd%")
-
-	if !(style & 0x10000000)
-	{
-		WinShow, ahk_class Chrome_WidgetWin_0;ahk_id %spotifyHwnd%
-		WinRestore, ahk_class Chrome_WidgetWin_0;ahk_id %spotifyHwnd%
-		WinActivate, ahk_class Chrome_WidgetWin_0;ahk_id %spotifyHwnd%
-		WinSet, Bottom, , ahk_class Chrome_WidgetWin_0;ahk_id %spotifyHwnd%
-	}
-	Return
-}
-
-checkminimizedo()
-{
-	DetectHiddenWindows On
 	spotifyHwnd := getSpotifyHwnd()
 
 	WinGet, style, Style, ahk_id %spotifyHwnd%
